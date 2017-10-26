@@ -2,8 +2,7 @@
 
 namespace EdmondsCommerce\MagentoLoadTester;
 
-class MagentoSearchUrlGenerator
-    implements UrlGeneratorInterface
+class MagentoSearchUrlGenerator implements UrlGeneratorInterface
 {
     protected function generateQueryString()
     {
@@ -12,12 +11,12 @@ class MagentoSearchUrlGenerator
         return md5($timestamp . $randomNumber);
     }
 
-    public function getSearchUrl()
+    protected function getSearchUrl()
     {
         return 'catalogsearch/result/?q=';
     }
 
-    public function getUrl($baseUrl)
+    public function getUrl() : string
     {
         $query = urlencode(implode(' ', array(
             $this->generateQueryString(),
@@ -25,6 +24,11 @@ class MagentoSearchUrlGenerator
             $this->generateQueryString()
         )));
 
-        return $baseUrl . '/' . $this->getSearchUrl() . $query;
+        return $this->getSearchUrl() . $query;
+    }
+
+    public function getPost() : array
+    {
+        return [];
     }
 }

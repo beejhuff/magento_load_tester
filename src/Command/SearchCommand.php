@@ -22,10 +22,17 @@ class SearchCommand extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln([
+            str_repeat('=', 60),
+            "Creating test for '$this->baseUrl' with a request count of '$this->requestCount'"
+        ]);
+
         $config       = new Config($this->baseUrl);
         $urlGenerator = new MagentoSearchUrlGenerator();
         $tester       = new LoadTester($config, $urlGenerator);
 
-        $tester->runTest($this->requestCount);
+        $results = $tester->runTest($this->requestCount);
+
+        print_r($results);
     }
 }
