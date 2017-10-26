@@ -1,6 +1,6 @@
 <?php
 
-namespace loadtest;
+namespace EdmondsCommerce\MagentoLoadTester;
 
 class MagentoSearchUrlGenerator
     implements UrlGeneratorInterface

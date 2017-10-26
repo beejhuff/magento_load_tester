@@ -1,0 +1,16 @@
+{
+  "name": "edmondscommerce/magento-load-tester",
+  "license": "MIT",
+  "type": "library",
+  "description": "Magento load testing framework for putting Magento websites through their paces.",
+  "autoload": {
+    "psr-4": {
+      "EdmondsCommerce\\MagentoLoadTester\\": [
+        "src/"
+      ]
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
