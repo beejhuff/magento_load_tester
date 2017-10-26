@@ -35,4 +35,22 @@ abstract class AbstractCommand extends Command
             'The number of concurrent requests you wish to hit the site with.'
         );
     }
+
+    protected function outputFailedRequests(OutputInterface $output, array $failedRequests)
+    {
+        $failedRequestsTable = new \Console_Table();
+
+        $failedRequestsTable->setHeaders([
+            'url', 'http_code'
+        ]);
+
+        foreach ($failedRequests as $failedRequest) {
+            $failedRequestsTable->addRow([
+                $failedRequest['url'],
+                $failedRequest['http_code']
+            ]);
+        }
+
+        $output->writeln($failedRequestsTable->getTable());
+    }
 }

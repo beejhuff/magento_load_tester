@@ -24,22 +24,20 @@ class LoadTester
         return $this->config;
     }
 
-    public function runTest($requestCount)
+    public function run($requestCount)
     {
-        $curlHandles = array();
-        $testUrls = array();
         $baseUrl = $this->getConfig()->getBaseUrl();
-
         $multi = curl_multi_init();
 
+        $curlHandles = array();
         for ($i = 0; $i < $requestCount; $i++) {
             $url = $baseUrl . '/'. $this->getUrlGenerator()->getUrl();
-            $testUrls[$i] = $url;
+
             $curlHandles[$i] = curl_init();
             curl_setopt($curlHandles[$i], CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curlHandles[$i], CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curlHandles[$i], CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($curlHandles[$i], CURLOPT_URL, $testUrls[$i]);
+            curl_setopt($curlHandles[$i], CURLOPT_URL, $url);
             curl_setopt($curlHandles[$i], CURLOPT_TIMEOUT, $this->getConfig()->getCurlTimeout());
             curl_setopt($curlHandles[$i], CURLOPT_CONNECTTIMEOUT, $this->getConfig()->getCurlConnectTimeout());
             curl_setopt($curlHandles[$i], CURLOPT_USERAGENT, $this->getConfig()->getUserAgent());

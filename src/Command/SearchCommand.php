@@ -23,16 +23,31 @@ class SearchCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            str_repeat('=', 60),
-            "Creating test for '$this->baseUrl' with a request count of '$this->requestCount'"
+            '',
+            "Creating load test for '$this->baseUrl' with a request count of '$this->requestCount'",
+            ''
         ]);
 
         $config       = new Config($this->baseUrl);
         $urlGenerator = new MagentoSearchUrlGenerator();
-        $tester       = new LoadTester($config, $urlGenerator);
+        $loadTester   = new LoadTester($config, $urlGenerator);
 
-        $results = $tester->runTest($this->requestCount);
+        $results = $loadTester->run($this->requestCount);
 
-        print_r($results);
+        $numberOfFailedRequests = $results->getNumberOfFailedRequests();
+        $totalRequestTime = $results->getTotalRequestTime();
+
+        $output->writeln([
+            '[RESULTS]',
+            '',
+            "$numberOfFailedRequests out of $this->requestCount requests failed.",
+            '',
+            "It took a total of $totalRequestTime seconds to complete all requests.",
+            '',
+            '[FAILED REQUEST DETAILS]',
+            ''
+        ]);
+
+        $this->outputFailedRequests($output, $results->getFailedRequests());
     }
 }
