@@ -2,7 +2,7 @@
 
 namespace EdmondsCommerce\MagentoLoadTester\Generator;
 
-class MagentoSearchUrlGenerator implements UrlGeneratorInterface
+class SearchUrlGenerator implements UrlGeneratorInterface
 {
     protected function generateQueryString()
     {

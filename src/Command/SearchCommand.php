@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use EdmondsCommerce\MagentoLoadTester\Config\Config;
-use EdmondsCommerce\MagentoLoadTester\Generator\MagentoSearchUrlGenerator;
+use EdmondsCommerce\MagentoLoadTester\Generator\SearchUrlGenerator;
 use EdmondsCommerce\MagentoLoadTester\LoadTester;
 
 class SearchCommand extends AbstractCommand
@@ -29,7 +29,7 @@ class SearchCommand extends AbstractCommand
         ]);
 
         $config       = new Config($this->baseUrl);
-        $urlGenerator = new MagentoSearchUrlGenerator();
+        $urlGenerator = new SearchUrlGenerator();
         $loadTester   = new LoadTester($config, $urlGenerator);
 
         $results = $loadTester->run($this->requestCount);
