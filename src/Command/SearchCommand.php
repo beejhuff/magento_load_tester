@@ -5,8 +5,8 @@ namespace EdmondsCommerce\MagentoLoadTester\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use EdmondsCommerce\MagentoLoadTester\Config;
-use EdmondsCommerce\MagentoLoadTester\MagentoSearchUrlGenerator;
+use EdmondsCommerce\MagentoLoadTester\Config\Config;
+use EdmondsCommerce\MagentoLoadTester\Generator\MagentoSearchUrlGenerator;
 use EdmondsCommerce\MagentoLoadTester\LoadTester;
 
 class SearchCommand extends AbstractCommand

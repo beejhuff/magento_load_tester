@@ -1,6 +1,6 @@
 <?php
 
-namespace EdmondsCommerce\MagentoLoadTester;
+namespace EdmondsCommerce\MagentoLoadTester\Config;
 
 class Config implements ConfigInterface
 {

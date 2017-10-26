@@ -2,6 +2,9 @@
 
 namespace EdmondsCommerce\MagentoLoadTester;
 
+use EdmondsCommerce\MagentoLoadTester\Config\ConfigInterface;
+use EdmondsCommerce\MagentoLoadTester\Generator\UrlGeneratorInterface;
+
 class LoadTester
 {
     private $urlGenerator;
