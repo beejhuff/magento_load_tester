@@ -12,5 +12,8 @@
   },
   "config": {
     "optimize-autoloader": true
+  },
+  "require": {
+    "symfony/console": "^3.3"
   }
 }
