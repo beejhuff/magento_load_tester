@@ -7,11 +7,6 @@ interface ConfigInterface
     /**
      * @return mixed
      */
-    public function getBaseUrl();
-
-    /**
-     * @return mixed
-     */
     public function getCurlTimeout();
 
     /**

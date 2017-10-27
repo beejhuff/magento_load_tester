@@ -4,13 +4,6 @@ namespace EdmondsCommerce\MagentoLoadTester\Config;
 
 class Config implements ConfigInterface
 {
-    private $baseUrl;
-
-    public function __construct($baseUrl)
-    {
-        $this->baseUrl = $baseUrl;
-    }
-
     public function getBaseUrl()
     {
         return $this->baseUrl;

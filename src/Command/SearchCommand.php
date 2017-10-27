@@ -28,8 +28,8 @@ class SearchCommand extends AbstractCommand
             ''
         ]);
 
-        $config       = new Config($this->baseUrl);
-        $urlGenerator = new SearchUrlGenerator();
+        $config       = new Config();
+        $urlGenerator = new SearchUrlGenerator($this->baseUrl);
         $loadTester   = new LoadTester($config, $urlGenerator);
 
         $results = $loadTester->run($this->requestCount);

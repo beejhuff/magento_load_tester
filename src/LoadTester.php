@@ -29,12 +29,11 @@ class LoadTester
 
     public function run($requestCount)
     {
-        $baseUrl = $this->getConfig()->getBaseUrl();
         $multi = curl_multi_init();
 
         $curlHandles = array();
         for ($i = 0; $i < $requestCount; $i++) {
-            $url = $baseUrl . '/'. $this->getUrlGenerator()->getUrl();
+            $url = $this->getUrlGenerator()->getUrl();
 
             $curlHandles[$i] = curl_init();
             curl_setopt($curlHandles[$i], CURLOPT_RETURNTRANSFER, 1);

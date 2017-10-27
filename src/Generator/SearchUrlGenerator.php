@@ -4,6 +4,13 @@ namespace EdmondsCommerce\MagentoLoadTester\Generator;
 
 class SearchUrlGenerator implements UrlGeneratorInterface
 {
+    protected $baseUrl;
+
+    public function __construct($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
+    }
+
     protected function generateQueryString()
     {
         $timestamp = time();
@@ -24,7 +31,7 @@ class SearchUrlGenerator implements UrlGeneratorInterface
             $this->generateQueryString()
         )));
 
-        return $this->getSearchUrl() . $query;
+        return $this->baseUrl . '/' . $this->getSearchUrl() . $query;
     }
 
     public function getPost() : array
