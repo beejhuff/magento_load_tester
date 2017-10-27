@@ -15,7 +15,6 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->baseUrl = $input->getArgument('base_url');
         $this->requestCount = $input->getArgument('request_count');
 
         parent::initialize($input, $output);
@@ -23,12 +22,6 @@ abstract class AbstractCommand extends Command
 
     protected function configure()
     {
-        $this->addArgument(
-            'base_url',
-            InputArgument::REQUIRED,
-            'The base URL for the site you wish to test'
-        );
-
         $this->addArgument(
             'request_count',
             InputArgument::REQUIRED,

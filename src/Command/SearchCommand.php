@@ -4,6 +4,7 @@ namespace EdmondsCommerce\MagentoLoadTester\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 use EdmondsCommerce\MagentoLoadTester\Config\Config;
 use EdmondsCommerce\MagentoLoadTester\Generator\SearchUrlGenerator;
@@ -17,7 +18,20 @@ class SearchCommand extends AbstractCommand
             ->setDescription('Load test the site using random search queries.')
             ->setHelp('TODO');
 
+        $this->addArgument(
+            'base_url',
+            InputArgument::REQUIRED,
+            'The base URL for the site you wish to test'
+        );
+
         parent::configure();
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->baseUrl = $input->getArgument('base_url');
+
+        parent::initialize($input, $output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
