@@ -1,6 +1,9 @@
 <?php
 
-namespace loadtest;
+namespace EdmondsCommerce\MagentoLoadTester;
+
+use EdmondsCommerce\MagentoLoadTester\Config\ConfigInterface;
+use EdmondsCommerce\MagentoLoadTester\Generator\UrlGeneratorInterface;
 
 class LoadTester
 {
@@ -24,69 +27,55 @@ class LoadTester
         return $this->config;
     }
 
-    public function runTest($maxNumberOfUrlsToTest)
+    public function run($requestCount)
     {
-        echo "Creating test with max ($maxNumberOfUrlsToTest) URLs\n";
-
-        $curlHandles = array();
-        $testUrls = array();
         $baseUrl = $this->getConfig()->getBaseUrl();
-
         $multi = curl_multi_init();
 
-        echo "Configuring\n";
+        $curlHandles = array();
+        for ($i = 0; $i < $requestCount; $i++) {
+            $url = $baseUrl . '/'. $this->getUrlGenerator()->getUrl();
 
-        $numberOfConfiguredRequests = 0;
-        for ($i = 0; $i < $maxNumberOfUrlsToTest; $i++) {
-            $url = $this->getUrlGenerator()->getUrl($baseUrl);
-            if (is_null($url)) {
-                echo "[NOTICE] Consumed all URLs\n";
-                break;
-            }
-            $testUrls[$i] = $url;
             $curlHandles[$i] = curl_init();
             curl_setopt($curlHandles[$i], CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curlHandles[$i], CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curlHandles[$i], CURLOPT_SSL_VERIFYPEER, 0);
-            curl_setopt($curlHandles[$i], CURLOPT_URL, $testUrls[$i]);
+            curl_setopt($curlHandles[$i], CURLOPT_URL, $url);
             curl_setopt($curlHandles[$i], CURLOPT_TIMEOUT, $this->getConfig()->getCurlTimeout());
             curl_setopt($curlHandles[$i], CURLOPT_CONNECTTIMEOUT, $this->getConfig()->getCurlConnectTimeout());
             curl_setopt($curlHandles[$i], CURLOPT_USERAGENT, $this->getConfig()->getUserAgent());
+
+            if (count($post = $this->getUrlGenerator()->getPost()) > 0) {
+                $postFields = http_build_query($post, '', '&');
+                curl_setopt($curlHandles[$i], CURLOPT_POST, 1);
+                curl_setopt($curlHandles[$i], CURLOPT_POSTFIELDS, $postFields);
+            }
+
             curl_multi_add_handle($multi, $curlHandles[$i]);
-
-            $numberOfConfiguredRequests++;
         }
-
-        echo "Running\n";
-
-        $startTime = microtime(true);
 
         do {
             curl_multi_exec($multi, $active);
         }
         while ($active > 0);
 
-        $failedRequestCount = 0;
+        $results = new Results();
+
         foreach ($curlHandles as $i => $curlHandle) {
             $info = curl_getinfo($curlHandle);
 
-            if (! in_array($info['http_code'], array(200, 301))) {
-                echo "[FAILED REQUEST]\n";
-                echo "URL: {$testUrls[$i]}\n";
-                echo "Http Code: {$info['http_code']}\n";
+            $results->addRequestTime($info['total_time']);
 
-                $failedRequestCount++;
+            if (! in_array($info['http_code'], array(200, 301))) {
+                $results->addFailedRequest(
+                    $info['url'],
+                    $info['http_code']
+                );
             }
         }
 
-        echo "\n";
-        echo "($failedRequestCount) out of ($numberOfConfiguredRequests) requests failed\n";
-
         unset($multi);
 
-        $endTime = microtime(true);
-        $deltaTime = $endTime - $startTime;
-
-        echo "Test ran for $deltaTime seconds\n";
+        return $results;
     }
 }

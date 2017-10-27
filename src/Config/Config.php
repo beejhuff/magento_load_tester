@@ -1,9 +1,8 @@
 <?php
 
-namespace loadtest;
+namespace EdmondsCommerce\MagentoLoadTester\Config;
 
-class Config
-    implements ConfigInterface
+class Config implements ConfigInterface
 {
     private $baseUrl;
 
