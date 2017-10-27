@@ -25,7 +25,7 @@ class SearchCommand extends AbstractCommand
         $this->addArgument(
             'base_urls',
             InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-            'The base URL for the site you wish to test'
+            'The base URL(s) for the site you wish to test'
         );
     }
 
@@ -40,7 +40,7 @@ class SearchCommand extends AbstractCommand
     {
         $output->writeln([
             '',
-            "Creating search load test for '$this->baseUrl' with a request count of '$this->requestCount'",
+            "Creating search load test with a request count of '$this->requestCount'",
             ''
         ]);
 
