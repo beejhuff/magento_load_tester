@@ -7,29 +7,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
 use EdmondsCommerce\MagentoLoadTester\Config\Config;
-use EdmondsCommerce\MagentoLoadTester\Generator\SearchUrlGenerator;
+use EdmondsCommerce\MagentoLoadTester\Generator\SitemapUrlGenerator;
 use EdmondsCommerce\MagentoLoadTester\LoadTester;
 
-class SearchCommand extends AbstractCommand
+class SitemapCommand extends AbstractCommand
 {
+    protected $sitemapUrls;
+
     protected function configure()
     {
         parent::configure();
 
-        $this->setName('load-test:search')
-            ->setDescription('Load test the site using random search queries.')
+        $this->setName('load-test:sitemap')
+            ->setDescription('Load test the site using random URLs selected from the sites sitemap(s).')
             ->setHelp('TODO');
 
         $this->addArgument(
-            'base_url',
-            InputArgument::REQUIRED,
-            'The base URL for the site you wish to test'
+            'sitemap_urls',
+            InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+            'A list of sitemap URLs for the load tester to harvest.'
         );
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->baseUrl = $input->getArgument('base_url');
+        $this->sitemapUrls = $input->getArgument('sitemap_urls');
 
         parent::initialize($input, $output);
     }
@@ -38,12 +40,12 @@ class SearchCommand extends AbstractCommand
     {
         $output->writeln([
             '',
-            "Creating search load test for '$this->baseUrl' with a request count of '$this->requestCount'",
+            "Creating sitemmap load test with a request count of '$this->requestCount'",
             ''
         ]);
 
         $config       = new Config();
-        $urlGenerator = new SearchUrlGenerator($this->baseUrl);
+        $urlGenerator = new SitemapUrlGenerator($this->sitemapUrls);
         $loadTester   = new LoadTester($config, $urlGenerator);
 
         $results = $loadTester->run($this->requestCount);
