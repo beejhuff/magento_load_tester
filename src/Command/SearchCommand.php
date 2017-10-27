@@ -12,6 +12,8 @@ use EdmondsCommerce\MagentoLoadTester\LoadTester;
 
 class SearchCommand extends AbstractCommand
 {
+    protected $baseUrls;
+
     protected function configure()
     {
         parent::configure();
@@ -21,15 +23,15 @@ class SearchCommand extends AbstractCommand
             ->setHelp('TODO');
 
         $this->addArgument(
-            'base_url',
-            InputArgument::REQUIRED,
+            'base_urls',
+            InputArgument::IS_ARRAY | InputArgument::REQUIRED,
             'The base URL for the site you wish to test'
         );
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->baseUrl = $input->getArgument('base_url');
+        $this->baseUrls = $input->getArgument('base_urls');
 
         parent::initialize($input, $output);
     }
@@ -43,7 +45,7 @@ class SearchCommand extends AbstractCommand
         ]);
 
         $config       = new Config();
-        $urlGenerator = new SearchUrlGenerator($this->baseUrl);
+        $urlGenerator = new SearchUrlGenerator($this->baseUrls);
         $loadTester   = new LoadTester($config, $urlGenerator);
 
         $results = $loadTester->run($this->requestCount);

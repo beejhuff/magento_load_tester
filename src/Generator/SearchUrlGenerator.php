@@ -4,11 +4,11 @@ namespace EdmondsCommerce\MagentoLoadTester\Generator;
 
 class SearchUrlGenerator implements UrlGeneratorInterface
 {
-    protected $baseUrl;
+    protected $baseUrls;
 
-    public function __construct($baseUrl)
+    public function __construct($baseUrls)
     {
-        $this->baseUrl = $baseUrl;
+        $this->baseUrls = $baseUrls;
     }
 
     protected function generateQueryString()
@@ -23,6 +23,12 @@ class SearchUrlGenerator implements UrlGeneratorInterface
         return 'catalogsearch/result/?q=';
     }
 
+    protected function getBaseUrl()
+    {
+        $randomIndex = array_rand($this->baseUrls);
+        return $this->baseUrls[$randomIndex];
+    }
+
     public function getUrl() : string
     {
         $query = urlencode(implode(' ', array(
@@ -31,7 +37,7 @@ class SearchUrlGenerator implements UrlGeneratorInterface
             $this->generateQueryString()
         )));
 
-        return $this->baseUrl . '/' . $this->getSearchUrl() . $query;
+        return $this->getBaseUrl() . '/' . $this->getSearchUrl() . $query;
     }
 
     public function getPost() : array
