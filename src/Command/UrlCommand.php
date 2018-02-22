@@ -52,6 +52,7 @@ class UrlCommand extends AbstractCommand
 
         $numberOfFailedRequests = $results->getNumberOfFailedRequests();
         $totalRequestTime = $results->getTotalRequestTime();
+        $averageRequestTime = ($this->requestCount != 0 ? ($results->getTotalRequestTime() / $this->requestCount) : 0);
 
         $output->writeln([
             '[RESULTS]',
@@ -59,6 +60,7 @@ class UrlCommand extends AbstractCommand
             "$numberOfFailedRequests out of $this->requestCount requests failed.",
             '',
             "It took a total of $totalRequestTime seconds to complete all requests.",
+            "It took an average of $averageRequestTime seconds to complete single request.",
             '',
             '[FAILED REQUEST DETAILS]',
             ''
